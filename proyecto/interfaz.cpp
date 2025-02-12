@@ -4,6 +4,7 @@
 
 using namespace std;
 
+//funcion que combierte el string del ususario en un vector de strings con los comandos
 vector<string> userIn(){
 	string in;
 	cout<<"$ ";
