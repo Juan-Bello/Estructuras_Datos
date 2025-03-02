@@ -1,27 +1,36 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <list>
+#include <fstream>
 
 using namespace std;
 
-//funcion que combierte el string del ususario en un vector de strings con los comandos
-vector<string> userIn(){
-	string in;
-	cout<<"$ ";
-	getline(cin, in);
-	stringstream ss(in);
-	vector<string> comando;
-	while(ss >> in){
-		comando.push_back(in);
-	}
-	
-	return comando;
+struct imagen {
+	string codigo;
+	int W;
+	int H;
+	int M;
+	vector<vector<int>> val;
+};
 
-}
+struct volumen {
+	int W;
+	int H;
+	int n_im;
+	vector<imagen> imgv;
+};
 
-int main(int argc,char *argv[]){
-	
-	
+
+vector<string> userIn();
+imagen cargarImg(string nombre);
+volumen cargarVol(string nombre_base,int n);
+
+int main(int argc,char *argv[]){	
+	imagen img;
+	volumen vol;
+	string n_img,n_vol;
+
 	while(true){
 		vector<string> comando = userIn();
 	
@@ -30,13 +39,20 @@ int main(int argc,char *argv[]){
 			exit(0);
 		}
 		else if (comando[0] == "cargar_imagen" && comando.size() == 2){
+			img = cargarImg(comando[1]);
+			n_img = comando[1];
 			cout<<"\nse cargo "<<comando[1]<<" exitosamente\n"<<endl;
 		}
 		else if (comando[0] == "cargar_volumen" && comando.size() == 3){
+			vol = cargarVol(comando[1],stoi(comando[2]));
+			n_vol = comando[1];
 			cout<<"\nse cargo "<<comando[1]<<" con "<<comando[2]<<" imagenes exitosamente\n"<<endl;
 		}
 		else if (comando[0] == "info_imagen" && comando.size() == 1){
-			cout<<"\ninformacion de la imagen\n"<<endl;
+			cout<<endl<<n_img<<"\nancho: "<<img.W<<"\nalto: "<<img.H<<endl;
+		}
+		else if (comando[0] == "info_volumen" && comando.size() == 1){
+			cout<<endl<<n_vol<<"\nancho: "<<vol.W<<"\nalto: "<<vol.H<<"\ntamaño: "<<vol.n_im<<endl;
 		}
 		else if (comando[0] == "proyeccion2D" && comando.size() == 4){
 			cout<<"\nse cargo "<<comando[3]<<"\ndireccion: "<<comando[1]<<"\ncriterio: "<<comando[2]<<endl<<endl;
@@ -55,6 +71,7 @@ int main(int argc,char *argv[]){
 			<<"cargar_imagen \n"
 			<<"cargar_volumen \n"
 			<<"info_imagen \n"
+			<<"info_volumen\n"
 			<<"proyeccion2D \n"
 			<<"codificar_imagen \n"
 			<<"decodificar_archivo \n"
@@ -74,6 +91,9 @@ int main(int argc,char *argv[]){
 			else if (comando[1] == "info_imagen")
 			        cout<<"\ninfo_imagen\n\n"
 			        <<"muestra informacion basica de la imagen cargada\n"<<endl;
+			else if (comando[1] == "info_volumen")
+			        cout<<"\ninfo_volumen\n\n"
+			        <<"muestra informacion basica del volumen cargado\n"<<endl;
 			else if (comando[1] == "proyeccion2D")
 				cout<<"\nproyeccion2D (direccion) (criterio) (nombre_archivo.pgm)\n\n"
 				<<"Genera la imagen basandose en la direccion la cual pueden ser:\n"
@@ -103,3 +123,103 @@ int main(int argc,char *argv[]){
 	return 0;
 
 }
+
+//funcion que dada la entrada del ususario, segmenta
+vector<string> userIn(){
+	string in;
+	cout<<"$ ";
+	getline(cin, in);
+	stringstream ss(in);
+	vector<string> comando;
+	while(ss >> in){
+		comando.push_back(in);
+	}
+	
+	return comando;
+
+}
+
+//funcion que lee una imagen en formato .pgm
+imagen cargarImg(string nombre){
+	imagen img;
+	string temp,a;
+
+	ifstream archivo(nombre);
+	if (archivo.is_open()){
+		getline(archivo,img.codigo);
+		//omitir los comentarios antes de la informacion de la imagen
+		archivo >> temp;
+		while(temp[0] == '#'){
+			getline(archivo,temp);
+			archivo >> temp;
+		}
+		img.W = stoi(temp);
+		archivo >> img.H;
+		archivo >> img.M;
+
+		// llenar los vectores anidados con los valores del archivo
+		for(int i=0;i<img.H;i++){
+			archivo >> temp; 
+			img.val.emplace_back(vector<int>{stoi(temp)});	//contruye la fila con el primer valor
+			for(int j=0;j<img.W-1;j++){
+				archivo >> temp; 
+				img.val[i].push_back(stoi(temp));		//llena el resto de valores de la fila
+			}
+		}
+
+		/*for(int i=0;i<img.H;i++){
+			for(int j=0;j<img.W;j++){
+				cout << img.val[i][j] << " ";
+			}
+			cout<<endl;
+		}*/
+
+		
+	}	
+
+
+	archivo.close();
+	
+	return img;
+}
+
+//funcion para cargar un volumen
+volumen cargarVol(string nombre_base,int n){
+	volumen vol;
+	imagen img;
+	vol.n_im = n;
+	for(int i=1; i <= n;i++){
+		if(n<=9)
+			img = cargarImg(nombre_base + "0" + to_string(i) + ".pmg");
+		else
+			img = cargarImg(nombre_base + to_string(i) + ".pmg");
+		
+		vol.imgv.emplace_back(img);
+	}
+	vol.H = img.H;
+	vol.W = img.W;
+
+	for(int i=0; i<n; i++){
+		for(int j=0; j<vol.H; j++){
+			for(int k=0; k<vol.W; k++){
+				cout << vol.imgv[i].val[j][k] << " ";
+			}
+			cout<<endl;
+		}
+	cout<<"\n\n";
+	}
+
+	return vol;
+}
+
+
+
+
+
+
+
+
+
+
+
+
