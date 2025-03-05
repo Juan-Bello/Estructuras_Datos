@@ -2,13 +2,14 @@
 #include <iostream>
 using namespace std;
 
+//estructura de nodo
 struct node {
 	int data;
 	struct node *left; 
 	struct node *right;
 };
 
-// New node creation
+// creacion de nodo nuevo
 struct node *newNode (int data){
 	struct node *node = (struct node *)malloc(sizeof(struct node));
 	node->data = data;
@@ -44,7 +45,7 @@ int main(){
 	cout << "\n";
 }
 
-//traverse PreOrder
+//trasversar en PreOrder
 void traversePreOrder (struct node *temp) {
 	if (temp != NULL) {
 		cout << " " << temp->data;
@@ -52,7 +53,7 @@ void traversePreOrder (struct node *temp) {
 		traversePreOrder(temp->right);
 	}
 }
-//traverse Inorder
+//trasversar en Inorder
 void traverseInOrder(struct node *temp) {
 	if (temp != NULL) {
 		traverseInOrder(temp->left);
@@ -60,7 +61,7 @@ void traverseInOrder(struct node *temp) {
 		traverseInOrder(temp->right);
 	}
 }
-//Traverse Postorder
+//Trasversar en Postorder
 void traversePostOrder (struct node *temp){
 	if (temp!= NULL){
 		traversePostOrder(temp->left);
