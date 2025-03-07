@@ -31,7 +31,7 @@ volumen cargarVol(string nombre_base, int n) {
     volumen vol;
     vol.n_im = n;
     for (int i = 1; i <= n; i++) {
-        string nombre = nombre_base + (n < 10 ? "0" : "") + to_string(i) + ".pgm";
+        string nombre = nombre_base + (n < 10 ? "0" : "") + to_string(i) + ".ppm";
         imagen img = cargarImg(nombre);
         vol.imgv.push_back(img);
         vol.H = img.H;
