@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     volumen vol;
     string n_img, n_vol;
 
+//while que lee los comandos ingresados por terminal y corre las funciones asociadas
     while (true) {
         vector<string> comando = userIn();
 
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
                 cout << "\nLa proyección 2D ha sido generada y almacenada en " << comando[3] << endl << endl;
             }
         }
-        else if (comando[0] == "ayuda" && comando.size() == 1) {
+        else if (comando[0] == "ayuda" && comando.size() == 1) {		//muestra la lista de comandos
             cout << "\n*****comandos*****\n"
                  << "cargar_imagen\n"
                  << "cargar_volumen\n"
@@ -57,7 +58,7 @@ int main(int argc, char *argv[]) {
                  << "segmentar\n"
                  << "exit\n\n";
         }
-        else if (comando[0] == "ayuda" && comando.size() > 1) {
+        else if (comando[0] == "ayuda" && comando.size() > 1) {			// muestra informacion espesifica del comando especificado
             if (comando[1] == "cargar_imagen")
                 cout << "\ncargar_imagen (nombre_imagen)\n\n"
                      << "Carga la imagen con el nombre dado en el sistema\n" << endl;
@@ -105,7 +106,7 @@ vector<string> userIn() {
     string in;
     cout << "$ ";
     getline(cin, in);
-    stringstream ss(in);
+    stringstream ss(in);		//se utiliza ss para separar la entrada del usuario en palabras individuales
     vector<string> comando;
     while (ss >> in) {
         comando.push_back(in);

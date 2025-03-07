@@ -8,7 +8,7 @@ imagen proyeccion2D(volumen vol, string direccion, string criterio) {
     resultado.M = vol.imgv[0].M;
     resultado.val = vector<vector<int>>(resultado.H, vector<int>(resultado.W, 0));
 
-    if (direccion == "x") {
+    if (direccion == "x") {						//proyeccion en x
         for (int y = 0; y < resultado.H; y++) {
             for (int z = 0; z < vol.n_im; z++) {
                 vector<int> valores;
@@ -30,7 +30,7 @@ imagen proyeccion2D(volumen vol, string direccion, string criterio) {
             }
         }
     }
-    else if (direccion == "y") {
+    else if (direccion == "y") {					//proyeccion en y
         for (int x = 0; x < resultado.W; x++) {
             for (int z = 0; z < vol.n_im; z++) {
                 vector<int> valores;
@@ -52,7 +52,7 @@ imagen proyeccion2D(volumen vol, string direccion, string criterio) {
             }
         }
     }
-    else if (direccion == "z") {
+    else if (direccion == "z") {					//proyeccion en z
         for (int y = 0; y < resultado.H; y++) {
             for (int x = 0; x < resultado.W; x++) {
                 vector<int> valores;
