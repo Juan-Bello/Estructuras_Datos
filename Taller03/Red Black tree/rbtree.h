@@ -43,7 +43,7 @@ public:
     void levelOrder();         // Recorrido por niveles
 };
 
-#include "rbtree.h"
+#include "rbtree.hxx"
 #endif
 
 
